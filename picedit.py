@@ -80,19 +80,15 @@ def embossed(image):
     return np.array([]) # to be removed when filling this function
 
 def rectangle_select(image, x, y):
-    img = image.copy()
-    r1 = x[0]
-    c1 = x[1]
-    r2 = y[0]
-    c2 = y[1]
-
-        
-        
-    #for r in range(len(img)):
-    #    for c in range(len(img[0])):
-    
-
-    return np.array([]) # to be removed when filling this function
+    mask = np.zeros((len(image), len(image[0])))
+    r1 = int(x[0])
+    c1 = int(x[1])
+    r2 = int(y[0])
+    c2 = int(y[1])
+    for r in range(r1, r2+1):
+        for c in range(c1, c2+1):
+            mask[r][c] = 1            
+    return mask
 
 def magic_wand_select(image, x, thres):                
     return np.array([]) # to be removed when filling this function
@@ -220,16 +216,23 @@ def menu():
             elif choice == '3':
                 img = grayscale(img)
             elif choice == '7':
-                 x1, x2 = input("Enter the coordinates for the top-left most pixel of the mask: ").split(',')
-                 y1, y2 = input("Enter the coordinates for the bottom-right most pixel of the mask: ").split(',')
-                 while x2 + y2 < len(img) or x2 + y2 < len(img[0]):
-                     top_left = list[x1, x2]
-                     bottom_right = list[y1, y2]
+                 top_left = list(input("Enter the coordinates for the top-left most pixel of the mask: ").split(','))
+                 bottom_right = list(input("Enter the coordinates for the bottom-right most pixel of the mask: ").split(','))
+                 x1 = int(top_left[0])
+                 x2 = int(top_left[1])
+                 y1 = int(bottom_right[0])
+                 y2 = int(bottom_right[1])
+                 while x2 + y2 < len(img) or x1 + y1 < len(img[0]):
                      rectangle_select(img, top_left, bottom_right)
+                     break
                  else:
                      print("Error: the defined limits exceed the size of the image! Please Retry.")
-                     x1, x2 = input("Enter the coordinates for the top-left most pixel of the mask: ").split(',')
-                     y1, y2 = input("Enter the coordinates for the bottom-right most pixel of the mask: ").split(',')
+                     top_left = list(input("Enter the coordinates for the top-left most pixel of the mask: ").split(','))
+                     bottom_right = list(input("Enter the coordinates for the bottom-right most pixel of the mask: ").split(','))
+                     x1 = int(top_left[0])
+                     x2 = int(top_left[1])
+                     y1 = int(bottom_right[0])
+                     y2 = int(bottom_right[1])
             else:
                 choice = input("Error - invalid choice, please retry:")
 
