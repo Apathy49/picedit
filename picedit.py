@@ -164,7 +164,7 @@ def menu():
                     return
             elif u == "l":
                     filename = input("Enter filename here: ")
-                    img, mask = load_image(filename)
+                    img, mask = load_image(filename) # insert error function here
                     flag = 0
                     break
             else:
@@ -200,7 +200,8 @@ def menu():
             elif choice == '1':
                 value = int(input("Enter brightness change:"))
                 while value > -255 and value < 255:
-                    img = change_brightness(img, value)
+                    temp_img = change_brightness(img, value)
+                    img = image_check(temp_img, img, mask)
                     break
                 else:
                     print("Please enter a value between -255 to 255")
@@ -208,13 +209,15 @@ def menu():
             elif choice == '2':
                 value = int(input("Enter contrast change:"))
                 while value > -255 and value < 255:
-                    img = change_contrast(img, value)
+                    temp_img = change_contrast(img, value)
+                    img = image_check(temp_img, img, mask)
                     break
                 else:
                     print("Please enter a value between -255 to 255")
                     value = int(input("Enter brightness change:"))
             elif choice == '3':
-                img = grayscale(img)
+                temp_img = grayscale(img)
+                img = image_check(temp_img, img, mask)
             elif choice == '7':
                  top_left = list(input("Enter the coordinates for the top-left most pixel of the mask: ").split(','))
                  bottom_right = list(input("Enter the coordinates for the bottom-right most pixel of the mask: ").split(','))
@@ -236,6 +239,22 @@ def menu():
             else:
                 choice = input("Error - invalid choice, please retry:")
 
+def image_check(temp_img, image, mask):
+    new_img = image.copy()
+    for r in range(len(new_img)):
+        for c in range(len(new_img[0])):
+            if mask[r][c] == 1:
+                new_img[r][c] = temp_img[r][c]
+    display_image(new_img, mask)
+    modifier = input("Is this change to the image alright? Y/N")
+    while modifier != 'Y' or modifier != 'N':
+        if modifier == 'Y':
+            return new_img
+        elif modifier == 'N':
+            return temp_img
+        else:
+            modifier = input("""ERROR: Please input a proper answer.
+                             Is this change to the image alright? Y/N""")
 
 if __name__ == "__main__":
     menu()
