@@ -71,7 +71,23 @@ def grayscale(image):
             
 
 def blur_effect(image):
-    return np.array([]) # to be removed when filling this function
+    def blur_effect(image):
+    img=image.copy()
+    
+    k=[[0.0625,0.125,0.0625],
+       [0.125,0.25,0.125],
+        [0.0625,0.125,0.0625]]
+   
+    for r in range(1,img.shape[0]-1):
+        for c in range(1,img.shape[1]-1):
+            img[r,c]=0.0625*img[r-1][c-1]+0.125*img[r-1][c]+0.0625*img[r-1][c+1]
+            +0.125*img[r][c-1]+0.25*img[r][c]+0.125*img[r][c+1]+0.0625*img[r+1][c-1]
+            +0.125*img[r+1][c]+0.0625*img[r+1][c+1]
+            
+                
+        
+    return img
+    
 
 def edge_detection(image):
     return np.array([]) # to be removed when filling this function
